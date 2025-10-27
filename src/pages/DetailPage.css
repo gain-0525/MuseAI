@@ -1,0 +1,27 @@
+.detail-page {
+  padding: 20px;
+}
+
+.back-btn {
+  margin-bottom: 20px;
+  padding: 6px 12px;
+  background-color: #eee;
+  border: none;
+  cursor: pointer;
+}
+
+.artifact-code {
+  color: #777;
+  margin-bottom: 12px;
+}
+
+.artifact-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 12px;
+}
+
+.artifact-description {
+  font-size: 16px;
+  line-height: 1.5;
+}
