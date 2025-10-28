@@ -1,13 +1,15 @@
-import TranslateModal from "../components/TranslateModal";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { artifacts, type Artifact } from "../data/artifacts";
+import TranslateModal from "../components/TranslateModal";
+import StoryModal from "../components/StoryModal";
 import "./DetailPage.css";
 
 const DetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [artifact, setArtifact] = useState<Artifact | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTranslateOpen, setIsTranslateOpen] = useState(false);
+  const [isStoryOpen, setIsStoryOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,9 +31,9 @@ const DetailPage: React.FC = () => {
   return (
     <div className="detail-page">
       <button className="back-btn" onClick={() => navigate(-1)}>뒤로가기</button>
+
       <h2>{artifact.title}</h2>
       <p className="artifact-code">고유번호: {artifact.artifactCode}</p>
-
       <img src={artifact.imageUrl} alt={artifact.title} className="artifact-image" />
 
       <div className="artifact-info">
@@ -41,13 +43,25 @@ const DetailPage: React.FC = () => {
 
       <p className="artifact-description">{artifact.description}</p>
 
-      {/* 번역 버튼 */}
-      <button className="translate-button" onClick={() => setIsModalOpen(true)}>번역</button>
+      {/* 버튼 그룹 */}
+      <div style={{ display: "flex", gap: "10px", marginTop: "15px", justifyContent: "center" }}>
+        <button className = "translate-btn" onClick={() => setIsTranslateOpen(true)}>번역</button>
+        <button className="story-btn" onClick={() => setIsStoryOpen(true)}>스토리 만들기</button>
+      </div>
 
-      {isModalOpen && (
+      {/* TranslateModal */}
+      {isTranslateOpen && (
         <TranslateModal
           text={artifact.description}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => setIsTranslateOpen(false)}
+        />
+      )}
+
+      {/* StoryModal */}
+      {isStoryOpen && (
+        <StoryModal
+          text={artifact.description}
+          onClose={() => setIsStoryOpen(false)}
         />
       )}
     </div>
@@ -55,3 +69,5 @@ const DetailPage: React.FC = () => {
 };
 
 export default DetailPage;
+
+

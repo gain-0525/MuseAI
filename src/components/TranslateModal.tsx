@@ -43,7 +43,7 @@ const TranslateModal: React.FC<TranslateModalProps> = ({ text, onClose }) => {
           onChange={(e) => setTargetLanguage(e.target.value)}
           placeholder="번역할 언어 입력 (예: English, Japanese)"
         />
-        <button className="translate-btn" onClick={handleTranslate} disabled={loading || !targetLanguage}>
+        <button className="transe-btn" onClick={handleTranslate} disabled={loading || !targetLanguage}>
           {loading ? "번역 중..." : "번역"}
         </button>
 
