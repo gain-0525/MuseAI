@@ -31,7 +31,19 @@ const DetailPage: React.FC = () => {
       <button className="back-btn" onClick={() => navigate(-1)}>뒤로가기</button>
       <h2>{artifact.title}</h2>
       <p className="artifact-code">고유번호: {artifact.artifactCode}</p>
-      <img src={artifact.imageUrl} alt={artifact.title} className="artifact-image" />
+
+      <img
+        src={artifact.imageUrl}
+        alt={artifact.title}
+        className="artifact-image"
+      />
+
+      {/* 🔹 새로 추가된 부분: location과 nation */}
+      <div className="artifact-info">
+        {artifact.nation && <p><strong>국가:</strong> {artifact.nation}</p>}
+        {artifact.location && <p><strong>출토지 / 소장처:</strong> {artifact.location}</p>}
+      </div>
+
       <p className="artifact-description">{artifact.description}</p>
     </div>
   );
