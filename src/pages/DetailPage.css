@@ -80,6 +80,14 @@
   color: #555;
 }
 
+
+.artifact-info strong {
+  color: #222;
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+
 /* 페이드인 효과 */
 @keyframes fadeIn {
   from {
