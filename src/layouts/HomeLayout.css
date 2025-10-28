@@ -3,61 +3,74 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 헤더 */
 .header {
-  position: sticky; /* 스크롤 시 상단 고정 */
+  position: sticky;
   top: 0;
   left: 0;
-  width: 100%; /* 화면 끝까지 확장 */
+  width: 100%;
   background-color: #f5f5f5;
   border-bottom: 2px solid #ccc;
   z-index: 100;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* 헤더 콘텐츠 정렬 */
 .nav-content {
-  max-width: 100%; /* 콘텐츠 최대 너비 */
-  margin: 0 auto; /* 화면 중앙 정렬 */
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 60px;
-  padding: 0 20px;
+  height: 65px;
+  padding: 0 30px;
 }
 
+/* 로고 */
 .logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
+  font-size: 26px;
+  font-weight: 700;
+  color: #222;
+  letter-spacing: 0.5px;
+  cursor: default;
 }
 
+/* 네비게이션 링크 */
 .nav-links a {
-  margin-left: 20px;
+  margin-left: 25px;
   text-decoration: none;
   color: #333;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
+/* 🔹 뒤로가기 버튼과 통일된 hover 스타일 */
 .nav-links a:hover {
-  color: #282829;
-  text-decoration: underline;
+  background-color: #333;
+  color: #fff;
+  text-decoration: none; /* 밑줄 제거 */
 }
 
-/* 메인 영역 */
+/* 메인 콘텐츠 영역 */
 .main-content {
   flex: 1;
-  padding: 20px;
-  width: 1200px; /* 콘텐츠 최대 너비 */
-  margin: 0 auto; /* 화면 중앙 정렬 */
+  padding: 30px 20px;
+  width: 1200px;
+  margin: 0 auto;
 }
 
 /* 푸터 */
 .footer {
-  width: 100%; /* 화면 끝까지 확장 */
+  width: 100%;
   text-align: center;
   padding: 15px 0;
   border-top: 2px solid #ccc;
   background-color: #f5f5f5;
   color: #666;
+  font-size: 14px;
 }
