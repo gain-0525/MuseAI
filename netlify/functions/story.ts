@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 
 interface RequestBody {
   text: string;     // artifact.description
-  language: string; // 입력받은 언어
+  language: string; // 번역할 언어
 }
 
 interface OpenAIChatResponse {
@@ -12,16 +12,27 @@ interface OpenAIChatResponse {
 
 interface StoryResponse {
   story: string;
-  imageUrl: string;
+}
+
+interface ErrorResponse {
+  error: string;
 }
 
 export const handler: Handler = async (event) => {
-  if (!event.body) return { statusCode: 400, body: "No body provided" };
+  if (!event.body) {
+    return { statusCode: 400, body: JSON.stringify({ error: "No body provided" }) };
+  }
 
-  const { text, language } = JSON.parse(event.body) as RequestBody;
+  let parsedBody: RequestBody;
+  try {
+    parsedBody = JSON.parse(event.body) as RequestBody;
+  } catch {
+    return { statusCode: 400, body: JSON.stringify({ error: "Invalid JSON body" }) };
+  }
+
+  const { text, language } = parsedBody;
 
   try {
-    // 1. 이야기 생성
     const storyRes = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -40,39 +51,24 @@ export const handler: Handler = async (event) => {
     });
 
     if (!storyRes.ok) {
-      const err = await storyRes.text();
-      return { statusCode: 500, body: `OpenAI Chat Error: ${err}` };
+      const errText = await storyRes.text();
+      console.error("OpenAI Chat Error:", errText);
+      return { statusCode: 500, body: JSON.stringify({ error: `OpenAI Chat Error: ${errText}` }) };
     }
 
     const storyDataRaw: unknown = await storyRes.json();
     const storyData = storyDataRaw as OpenAIChatResponse;
-    const story = storyData.choices[0].message.content;
+    const story = storyData.choices?.[0]?.message?.content;
 
-    // 2. 이미지 생성
-    const imageRes = await fetch("https://api.openai.com/v1/images/generations", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        prompt: `Illustrate this story for children: "${story}"`,
-        size: "256x256",
-      }),
-    });
-
-    if (!imageRes.ok) {
-      const err = await imageRes.text();
-      return { statusCode: 500, body: `OpenAI Image Error: ${err}` };
+    if (!story) {
+      return { statusCode: 500, body: JSON.stringify({ error: "No story returned from OpenAI" }) };
     }
 
-    const imageDataRaw: unknown = await imageRes.json();
-    const imageData = (imageDataRaw as any).data[0].url;
+    return { statusCode: 200, body: JSON.stringify({ story }) };
 
-    const response: StoryResponse = { story, imageUrl: imageData };
-    return { statusCode: 200, body: JSON.stringify(response) };
-  } catch (error) {
-    return { statusCode: 500, body: `Server Error: ${error}` };
+  } catch (error: any) {
+    console.error("Server Error:", error);
+    return { statusCode: 500, body: JSON.stringify({ error: `Server Error: ${error.message || error}` }) };
   }
 };
 
