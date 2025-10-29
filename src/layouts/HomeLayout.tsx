@@ -10,6 +10,7 @@ const HomeLayout = () => {
           <div className="nav-links">
             <Link to="/about">MuseAI란</Link>
             <Link to="/guide">사용가이드</Link>
+            <Link to="/"> Home </Link>
           </div>
         </div>
       </nav>

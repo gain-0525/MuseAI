@@ -1,0 +1,100 @@
+/* 전체 배경 어둡게 */
+.story-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* 모달 박스 */
+.story-modal {
+  background-color: #fff;
+  width: 90%;
+  max-width: 600px;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow-y: auto;
+  max-height: 80vh;
+}
+
+/* 제목 */
+.story-modal h2 {
+  margin-top: 0;
+  text-align: center;
+}
+
+/* 언어 입력 */
+.story-modal input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin: 15px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* 버튼 그룹 */
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.modal-buttons button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+}
+
+.modal-buttons button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* 결과 스토리 영역 */
+.story-result {
+  margin-top: 20px;
+  background-color: #f8f8f8;
+  padding: 15px;
+  border-radius: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  white-space: pre-wrap; /* 자동 줄바꿈 */
+  word-break: break-word; /* 긴 단어도 줄바꿈 */
+}
+
+/* 생성된 이미지 */
+.story-image {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.story-image img {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.story-result pre {
+  white-space: pre-wrap;      /* 줄바꿈 허용 */
+  word-break: break-word;     /* 긴 단어도 줄바꿈 */
+  max-width: 100%;            /* 부모 컨테이너 너비에 맞춤 */
+  overflow-x: auto;           /* 가로 스크롤 필요 시 생김 */
+  background-color: #f8f8f8;
+  padding: 10px;
+  border-radius: 6px;
+}

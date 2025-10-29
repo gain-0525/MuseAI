@@ -12,6 +12,7 @@
   "dependencies": {
     "@netlify/functions": "^5.0.1",
     "@vercel/node": "^5.5.0",
+    "dotenv": "^17.2.3",
     "node-fetch": "^3.3.2",
     "openai": "^6.7.0",
     "react": "^19.1.1",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@types/dotenv": "^6.1.1",
     "@types/node": "^24.9.1",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
