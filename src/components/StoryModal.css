@@ -23,12 +23,14 @@
   position: relative;
   overflow-y: auto;
   max-height: 80vh;
+  box-sizing: border-box;
 }
 
 /* 제목 */
 .story-modal h2 {
   margin-top: 0;
   text-align: center;
+  font-size: 22px;
 }
 
 /* 언어 입력 */
@@ -39,6 +41,7 @@
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
 /* 버튼 그룹 */
@@ -47,6 +50,7 @@
   justify-content: flex-end;
   gap: 10px;
   margin-bottom: 15px;
+  flex-wrap: wrap; /* 모바일에서 버튼이 줄바꿈 가능 */
 }
 
 .modal-buttons button {
@@ -57,7 +61,6 @@
   font-size: 14px;
   background-color: #333;
   color: #fff;
-  border: none;
 }
 
 .modal-buttons button:disabled {
@@ -73,8 +76,18 @@
   border-radius: 8px;
   max-height: 300px;
   overflow-y: auto;
-  white-space: pre-wrap; /* 자동 줄바꿈 */
-  word-break: break-word; /* 긴 단어도 줄바꿈 */
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.story-result pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-width: 100%;
+  overflow-x: auto;
+  background-color: #f8f8f8;
+  padding: 10px;
+  border-radius: 6px;
 }
 
 /* 생성된 이미지 */
@@ -89,12 +102,71 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.story-result pre {
-  white-space: pre-wrap;      /* 줄바꿈 허용 */
-  word-break: break-word;     /* 긴 단어도 줄바꿈 */
-  max-width: 100%;            /* 부모 컨테이너 너비에 맞춤 */
-  overflow-x: auto;           /* 가로 스크롤 필요 시 생김 */
-  background-color: #f8f8f8;
-  padding: 10px;
-  border-radius: 6px;
+/* ---------------------- 반응형 ---------------------- */
+
+/* 태블릿 (768px 이하) */
+@media (max-width: 768px) {
+  .story-modal {
+    max-width: 500px;
+    padding: 20px;
+  }
+
+  .story-modal h2 {
+    font-size: 20px;
+  }
+
+  .story-modal input[type="text"] {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .modal-buttons button {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .story-result {
+    max-height: 250px;
+    padding: 12px;
+  }
+}
+
+/* 모바일 (480px 이하) */
+@media (max-width: 480px) {
+  .story-modal {
+    max-width: 100%;
+    padding: 15px;
+    max-height: 90vh;
+  }
+
+  .story-modal h2 {
+    font-size: 18px;
+  }
+
+  .story-modal input[type="text"] {
+    font-size: 12px;
+    padding: 7px;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .modal-buttons button {
+    width: 100%;
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .story-result {
+    max-height: 200px;
+    padding: 10px;
+  }
+
+  .story-image img {
+    max-height: 250px;
+    object-fit: contain;
+  }
 }

@@ -1,6 +1,6 @@
 .detail-page {
   max-width: 900px;
-  margin: 120px auto 80px; /* 🔹 헤더 높이만큼 여백 추가 */
+  margin: 120px auto 80px; /* 헤더 높이 고려 */
   padding: 40px;
   background: #fff;
   border-radius: 20px;
@@ -9,13 +9,14 @@
   text-align: center;
   animation: fadeIn 0.5s ease-in-out;
   position: relative;
+  box-sizing: border-box;
 }
 
 /* 뒤로가기 버튼 */
 .back-btn {
   position: absolute;
   left: 20px;
-  top: -60px; /* 🔹 콘텐츠 상단보다 위로 띄워서 자연스러운 위치로 */
+  top: -60px;
   background: #f2f2f2;
   color: #333;
   border: none;
@@ -24,7 +25,7 @@
   cursor: pointer;
   font-size: 15px;
   transition: all 0.3s ease;
-  z-index: 1000; /* 🔹 헤더보다 위에 표시 */
+  z-index: 1000;
 }
 
 .back-btn:hover {
@@ -75,32 +76,30 @@
   padding: 0 25px;
 }
 
-/* 유물 없음 메시지 */
-.detail-page p {
-  font-size: 16px;
-  color: #555;
+/* 버튼 그룹 */
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
 }
 
-
-.artifact-info strong {
-  color: #222;
-  font-weight: 600;
-  margin-right: 5px;
+.translate-btn, .story-btn {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: all 0.3s ease;
 }
 
-
-/* 페이드인 효과 */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.translate-btn:hover, .story-btn:hover {
+  background-color: #555;
 }
 
+/* 모달 관련 */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -122,51 +121,94 @@
   max-width: 90%;
 }
 
-.modal input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
+/* 정보 영역 */
+.artifact-info strong {
+  color: #222;
+  font-weight: 600;
+  margin-right: 5px;
 }
 
-.ai-response {
-  margin-top: 10px;
-  background-color: #f3f3f3;
-  padding: 10px;
-  border-radius: 8px;
+/* 페이드인 효과 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.close-btn {
-  margin-top: 10px;
+/* ---------------------- 🔹 반응형 ---------------------- */
+
+/* 🟠 태블릿 (768px 이하) */
+@media (max-width: 768px) {
+  .detail-page {
+    margin: 100px auto 60px;
+    padding: 25px;
+    max-width: 90%;
+  }
+
+  .detail-page h2 {
+    font-size: 22px;
+  }
+
+  .artifact-image {
+    max-width: 100%;
+  }
+
+  .artifact-description {
+    font-size: 15px;
+    padding: 0 10px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .translate-btn, .story-btn {
+    width: 100%;
+  }
+
+  .back-btn {
+    top: -50px;
+    left: 10px;
+    padding: 8px 14px;
+    font-size: 14px;
+  }
 }
 
-.translate-button {
-  margin-top: 20px;
-  background-color: #333;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 18px;
-  cursor: pointer;
-  font-size: 15px;
-  transition: all 0.3s ease;
+/* 🔵 모바일 (480px 이하) */
+@media (max-width: 480px) {
+  .detail-page {
+    padding: 20px;
+    margin: 80px auto 40px;
+  }
+
+  .detail-page h2 {
+    font-size: 20px;
+  }
+
+  .artifact-description {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .artifact-image {
+    border-radius: 10px;
+    margin: 15px 0;
+  }
+
+  .translate-btn, .story-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .back-btn {
+    top: -40px;
+    left: 5px;
+    font-size: 13px;
+  }
 }
-
-
-.button-group {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.translate-btn, .story-btn {
-  background-color: #333;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 18px;
-  cursor: pointer;
-  align-items: center;
-
-}
-

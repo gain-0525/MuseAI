@@ -4,6 +4,7 @@
   flex-direction: column;
   min-height: 100vh;
   font-family: "Noto Sans KR", sans-serif;
+  overflow-x: hidden; /* 🔹 가로 스크롤 방지 */
 }
 
 /* 헤더 */
@@ -18,15 +19,16 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* 헤더 콘텐츠 정렬 */
+/* 헤더 콘텐츠 정렬 (이제 화면 전체 너비 사용) */
 .nav-content {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 65px;
-  padding: 0 30px;
+  padding: 0 30px; /* 🔹 좌우 여백만 유지 */
+  box-sizing: border-box;
 }
 
 /* 로고 */
@@ -36,9 +38,16 @@
   color: #222;
   letter-spacing: 0.5px;
   cursor: default;
+  white-space: nowrap;
 }
 
 /* 네비게이션 링크 */
+.nav-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
 .nav-links a {
   margin-left: 25px;
   text-decoration: none;
@@ -47,20 +56,22 @@
   padding: 8px 14px;
   border-radius: 8px;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
-/* 🔹 뒤로가기 버튼과 통일된 hover 스타일 */
+/* hover 효과 */
 .nav-links a:hover {
   background-color: #333;
   color: #fff;
-  text-decoration: none; /* 밑줄 제거 */
 }
 
-/* 메인 콘텐츠 영역 */
+/* 메인 콘텐츠 */
 .main-content {
   flex: 1;
   padding: 30px 20px;
-  width: 1200px;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -73,4 +84,63 @@
   background-color: #f5f5f5;
   color: #666;
   font-size: 14px;
+}
+
+/* ------------------- 반응형 ------------------- */
+
+/* 💻 노트북 (≤ 1200px) */
+@media (max-width: 1200px) {
+  .nav-content {
+    padding: 0 20px;
+  }
+
+  .logo {
+    font-size: 24px;
+  }
+
+  .nav-links a {
+    margin-left: 18px;
+    padding: 6px 10px;
+  }
+}
+
+/* 📱 패드 (≤ 768px) */
+@media (max-width: 768px) {
+  .nav-content {
+    padding: 0 16px;
+    height: 60px;
+  }
+
+  .logo {
+    font-size: 22px;
+  }
+
+  .nav-links a {
+    margin-left: 12px;
+    font-size: 15px;
+    padding: 6px 8px;
+  }
+}
+
+/* 📞 모바일 (≤ 480px) */
+@media (max-width: 480px) {
+  .nav-content {
+    padding: 0 10px;
+    height: 55px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .nav-links a {
+    margin-left: 8px;
+    font-size: 14px;
+    padding: 5px 6px;
+  }
+
+  .footer {
+    font-size: 12px;
+    padding: 12px 0;
+  }
 }
