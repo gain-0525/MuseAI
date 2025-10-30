@@ -38,10 +38,11 @@ const TranslateModal: React.FC<TranslateModalProps> = ({ text, onClose }) => {
     <div className="modal-overlay">
       <div className="modal">
         <h3>번역하기</h3>
+        <p className="description">Please write down the language name you want to translate</p>
         <textarea
           value={targetLanguage}
           onChange={(e) => setTargetLanguage(e.target.value)}
-          placeholder="번역할 언어 입력 (예: English, Japanese)"
+          placeholder="번역할 언어 입력 (예: 한국어 English, 中文, 日本語)"
         />
         <button className="transe-btn" onClick={handleTranslate} disabled={loading || !targetLanguage}>
           {loading ? "번역 중..." : "번역"}
