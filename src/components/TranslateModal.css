@@ -48,3 +48,14 @@ button {
 .close-btn:hover, .translate-btn:hover {
   background-color: #555;
 }
+
+.tts-btn {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  margin-bottom: 10px;
+
+}
