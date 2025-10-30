@@ -48,11 +48,14 @@ export default function StoryModal({ text, onClose }: StoryModalProps) {
   return (
     <div className="story-modal-overlay">
       <div className="story-modal">
-        <h2>AI 동화 생성기 📖</h2>
+        <h2>AI 동화 생성기</h2>
+        <p className="description"> 
+          번역을 원하는 언어명을 해당 언어로 적어주세요 <br />
+          Please write down the language name you want to translate in that language </p>
 
         <input
           type="text"
-          placeholder="번역할 언어를 입력하세요"
+          placeholder="예: 한국어, English, 中文, 日本語"
           value={language}
           onChange={(e) => setLanguage(e.target.value)}
         />

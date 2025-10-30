@@ -45,6 +45,14 @@ const GuidePage: React.FC = () => {
           편리하게 이용할 수 있습니다.
         </p>
       </section>
+
+      <section className="guide-section">
+        <h2>6. 주의사항 </h2>
+        <p>스토리스토리설명을 기반으로 ai가 생성하는 것입니다.
+          제작한 스토리 기반으로 그림을 생게 됩니다. 
+          이 때, AI 생성 기준 부적합 할 시 그림으로 제작되지 않으며 에러가 발생하니 유의 바랍니다.
+        </p>
+      </section>
     </div>
   );
 };

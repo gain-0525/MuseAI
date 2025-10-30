@@ -45,8 +45,8 @@ const DetailPage: React.FC = () => {
 
       {/* 버튼 그룹 */}
       <div style={{ display: "flex", gap: "10px", marginTop: "15px", justifyContent: "center" }}>
-        <button className = "translate-btn" onClick={() => setIsTranslateOpen(true)}>번역</button>
-        <button className="story-btn" onClick={() => setIsStoryOpen(true)}>스토리 만들기</button>
+        <button className = "translate-btn" onClick={() => setIsTranslateOpen(true)}>번역 translate</button>
+        <button className="story-btn" onClick={() => setIsStoryOpen(true)}>스토리 story</button>
       </div>
 
       {/* TranslateModal */}
