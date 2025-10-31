@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import "./TranslateModal.css";
 
 interface TranslateModalProps {
-  text: string;
+  name: string; // 제목
+  text: string;  // 설명
   onClose: () => void;
 }
 
-const TranslateModal: React.FC<TranslateModalProps> = ({ text, onClose }) => {
+const TranslateModal: React.FC<TranslateModalProps> = ({ name, text, onClose }) => {
   const [targetLanguage, setTargetLanguage] = useState("");
   const [translation, setTranslation] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,7 +26,7 @@ const TranslateModal: React.FC<TranslateModalProps> = ({ text, onClose }) => {
       const res = await fetch("/.netlify/functions/translate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, targetLanguage }),
+        body: JSON.stringify({ name, text, targetLanguage }),
       });
 
       const data = await res.json();
@@ -44,12 +45,10 @@ const TranslateModal: React.FC<TranslateModalProps> = ({ text, onClose }) => {
     setTtsLoading(true);
 
     try {
-      // 기존 재생 중이면 멈춤
       if (audioSource) {
         audioSource.stop();
       }
 
-      // 새 AudioContext 생성
       const ctx = audioContext || new AudioContext();
       setAudioContext(ctx);
 
@@ -62,8 +61,6 @@ const TranslateModal: React.FC<TranslateModalProps> = ({ text, onClose }) => {
       if (!res.ok) throw new Error("TTS 요청 실패");
 
       const arrayBuffer = await res.arrayBuffer();
-
-      // 브라우저에서 디코딩
       const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
 
       const source = ctx.createBufferSource();
@@ -137,4 +134,3 @@ const TranslateModal: React.FC<TranslateModalProps> = ({ text, onClose }) => {
 };
 
 export default TranslateModal;
-
