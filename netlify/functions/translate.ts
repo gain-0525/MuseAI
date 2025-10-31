@@ -2,6 +2,7 @@ import type { Handler } from "@netlify/functions";
 import fetch from "node-fetch";
 
 interface RequestBody {
+  name: string;
   text: string;
   targetLanguage: string;
 }
@@ -15,7 +16,8 @@ export const handler: Handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: "Request body is missing" }) };
   }
 
-  const { text, targetLanguage } = JSON.parse(event.body) as RequestBody;
+  const { name, text, targetLanguage } = JSON.parse(event.body) as RequestBody;
+  const contentToTranslate = `${name}\n\n${text}`;
 
   if (!process.env.OPENAI_API_KEY) {
     console.error("OPENAI_API_KEY is missing");
@@ -32,7 +34,7 @@ export const handler: Handler = async (event) => {
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: [
-          { role: "user", content: `Translate the following text into ${targetLanguage}: ${text}` },
+          { role: "user", content: `Translate the following text into ${targetLanguage}: ${contentToTranslate}` },
         ],
       }),
     });

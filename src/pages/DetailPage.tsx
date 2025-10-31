@@ -52,6 +52,7 @@ const DetailPage: React.FC = () => {
       {/* TranslateModal */}
       {isTranslateOpen && (
         <TranslateModal
+          name={artifact.title}
           text={artifact.description}
           onClose={() => setIsTranslateOpen(false)}
         />
