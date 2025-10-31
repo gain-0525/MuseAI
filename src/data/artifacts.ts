@@ -31,7 +31,7 @@ export const artifacts: Artifact[] = [
   },
   {
     id: 3,
-    artifactCode: "A003",
+    artifactCode: "B123",
     title: "농경문 청동기",
     location: "선사고대관",
     nation: "한국-초기철기",
@@ -40,7 +40,7 @@ export const artifacts: Artifact[] = [
   },
   {
     id: 4,
-    artifactCode: "A004",
+    artifactCode: "A014",
     title: "청동거울",
     location: "선사고대관",
     nation: "한국-초기철기",
@@ -58,7 +58,7 @@ export const artifacts: Artifact[] = [
   },
   {
     id: 6,
-    artifactCode: "A006",
+    artifactCode: "C008",
     title: "가야 갑옷",
     description: "고령 지산동 32호 무덤에서 출토된 갑옷과 투구입니다. 갑옷은 가로로 긴 조금 넓은 판과 좁은 판을 못으로 고정한 뒤 몸의 곡선에 맞춘 횡장판갑옷입니다. 투구는 복숭아씨앗 모양을 닮았는데 목 부분을 가리는 긴 철판이 투구 뒷부분에 붙어 있습니다. 이와 별도로 어깨를 가리는 갑옷도 출토되었는데, 당시 대가야 지역 판갑옷의 정수를 볼 수 있습니다.",
     location: "선사고대관",

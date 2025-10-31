@@ -17,7 +17,7 @@ export default function StoryModal({ text, onClose }: StoryModalProps) {
     setLoading(true);
 
     try {
-      // 1️⃣ 스토리 생성
+      // 스토리 생성
       const storyRes = await fetch("/.netlify/functions/story", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -27,7 +27,7 @@ export default function StoryModal({ text, onClose }: StoryModalProps) {
       if (storyJson.error) return alert(storyJson.error);
       setStoryData(storyJson.story!);
 
-      // 2️⃣ 이미지 생성
+      // 이미지 생성
       const imgRes = await fetch("/.netlify/functions/image", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
