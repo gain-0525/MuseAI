@@ -1,4 +1,4 @@
-#MuseAI
+# MuseAI
 
 MuseAI는 텍스트를 번역하고, 번역된 내용을 자연스러운 음성으로 들을 수 있는 AI 기반 웹 애플리케이션입니다.
 OpenAI API를 활용하여 제목과 설명을 동시에 번역하고, TTS(Text-to-Speech) 기능으로 음성 재생까지 지원합니다.
