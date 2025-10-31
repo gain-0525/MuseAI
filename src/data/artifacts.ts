@@ -40,7 +40,7 @@ export const artifacts: Artifact[] = [
   },
   {
     id: 4,
-    artifactCode: "A014",
+    artifactCode: "C014",
     title: "청동거울",
     location: "선사고대관",
     nation: "한국-초기철기",
