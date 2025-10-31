@@ -11,7 +11,7 @@
   z-index: 9999;
 }
 
-/* ✅ 핵심 수정 */
+
 .modal {
   background: white;
   padding: 1.5rem;
@@ -36,8 +36,8 @@ button {
 
 .translation-result {
   margin-top: 10px;
-  word-wrap: break-word; /* ✅ 긴 단어 줄바꿈 */
-  white-space: pre-wrap; /* ✅ 줄바꿈 유지 */
+  word-wrap: break-word; 
+  white-space: pre-wrap; 
 }
 
 .error {

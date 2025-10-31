@@ -4,7 +4,7 @@
   flex-direction: column;
   min-height: 100vh;
   font-family: "Noto Sans KR", sans-serif;
-  overflow-x: hidden; /* 🔹 가로 스크롤 방지 */
+  overflow-x: hidden; /* 가로 스크롤 방지 */
 }
 
 /* 헤더 */
@@ -27,7 +27,7 @@
   justify-content: space-between;
   align-items: center;
   height: 65px;
-  padding: 0 30px; /* 🔹 좌우 여백만 유지 */
+  padding: 0 30px; /* 좌우 여백만 유지 */
   box-sizing: border-box;
 }
 
