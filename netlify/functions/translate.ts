@@ -34,7 +34,14 @@ export const handler: Handler = async (event) => {
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: [
-          { role: "user", content: `Translate the following text into ${targetLanguage}: ${contentToTranslate}` },
+          {
+            role: "system",
+            content: `You are a professional translator. Your job is to translate texts strictly into ${targetLanguage}. Output only the translated text in ${targetLanguage}.`,
+          },
+          {
+            role: "user",
+            content: contentToTranslate,
+          },
         ],
       }),
     });
@@ -53,4 +60,5 @@ export const handler: Handler = async (event) => {
     return { statusCode: 500, body: JSON.stringify({ error: err.message || "Unknown error" }) };
   }
 };
+
 export default handler;
