@@ -1,27 +1,27 @@
 import type { Handler } from "@netlify/functions";
 import fetch from "node-fetch";
 
-//인터페이스
+// 인터페이스
 interface ImageRequestBody {
   description: string; // story 내용
 }
 
 interface ImageResponse {
-  imageUrl: string;
+  imageUrl: string | null;
   summary?: string;
+  warning?: string;
 }
 
-interface ErrorResponse {
-  error: string;
-}
-
-// GPT Chat Completion 응답 타입 (간단히)
 interface ChatCompletionResponse {
   choices: {
     message: {
       content: string;
     };
   }[];
+}
+
+interface OpenAIImageResponse {
+  data: { url: string }[];
 }
 
 const forbiddenWords = ["폭력", "총", "죽음", "살인", "성적", "음란", "테러"];
@@ -36,14 +36,13 @@ function sanitizeText(text: string): string {
   return sanitized;
 }
 
-//설정 상수
-const SUMMARIZE_THRESHOLD = 1000; // 원래 체크하던 임계값 (보류용)
-const CHUNK_SIZE = 3500; // chat model에 보낼 청크 크기 (문자 단위)
-const FINAL_PROMPT_MAX = 900; // 이미지 API에 보낼 최종 프롬프트 최대 길이
-const MODEL = "gpt-4o-mini"; // 사용 모델
+// 설정 상수
+const SUMMARIZE_THRESHOLD = 1000;
+const CHUNK_SIZE = 3500;
+const FINAL_PROMPT_MAX = 900;
+const MODEL = "gpt-4o-mini";
 
-
-// 긴 스토리 요약 함수 (에러 핸들링 포함)
+// 긴 스토리 요약 함수
 async function summarizeText(text: string): Promise<string> {
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -65,125 +64,135 @@ async function summarizeText(text: string): Promise<string> {
             content: `Summarize this story in one short paragraph under 500 characters:\n\n${text}`,
           },
         ],
-        max_tokens: 400, // 안전장치
+        max_tokens: 400,
       }),
     });
 
     if (!res.ok) {
       const txt = await res.text();
       console.error("summarizeText - OpenAI error:", res.status, txt);
-      // 폴백: 앞부분을 잘라서 반환
       return text.slice(0, 500);
     }
 
     const data = (await res.json()) as ChatCompletionResponse;
     const summary = data?.choices?.[0]?.message?.content?.trim();
     return summary || text.slice(0, 500);
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("summarizeText - Exception:", err);
-    return text.slice(0, 500); // 폴백
+    return text.slice(0, 500);
   }
 }
 
-
-//긴 텍스트 안전하게 요약/준비 (청크 요약 -> 통합 요약)
-
-async function safePreparePrompt(text: string): Promise<{ finalPrompt: string; summary?: string }> {
-  // 이미 짧으면 그대로 사용
+// 긴 텍스트 안전하게 요약/준비
+async function safePreparePrompt(
+  text: string
+): Promise<{ finalPrompt: string; summary?: string }> {
   if (text.length <= SUMMARIZE_THRESHOLD) {
     const final = text.slice(0, FINAL_PROMPT_MAX);
     return { finalPrompt: final, summary: undefined };
   }
 
-  //텍스트 청크화
   const chunks: string[] = [];
   for (let i = 0; i < text.length; i += CHUNK_SIZE) {
     chunks.push(text.slice(i, i + CHUNK_SIZE));
   }
 
-  //각 청크 요약 (병렬로 처리해도 되지만, rate-limit 고려해 순차 처리)
   const chunkSummaries: string[] = [];
   for (const chunk of chunks) {
-    // summarizeText 내부에서 실패 시 안전 폴백을 반환함
     const s = await summarizeText(chunk);
     chunkSummaries.push(s);
   }
 
-  //요약들을 합쳐서 필요하면 재요약
   let combined = chunkSummaries.join(" ");
   if (combined.length > CHUNK_SIZE) {
-    // 한 번 더 요약 시도 (더 짧은 결과 기대)
     try {
       combined = await summarizeText(combined);
-    } catch (e) {
-      // 폴백: 앞부분 잘라서 사용
+    } catch {
       combined = combined.slice(0, 1200);
     }
   }
 
-  // finalPrompt는 이미지 API 제한을 고려해 잘라둠
   const finalPrompt = combined.slice(0, FINAL_PROMPT_MAX);
-
   return { finalPrompt, summary: combined };
 }
 
-
-//Netlify Handler (수정본)
-
+// Netlify Handler
 export const handler: Handler = async (event) => {
-  if (!event.body)
+  if (!event.body) {
     return { statusCode: 400, body: JSON.stringify({ error: "No body provided" }) };
+  }
 
   const { description } = JSON.parse(event.body) as ImageRequestBody;
 
   try {
-    //입력 텍스트 정제
     const cleanDescription = sanitizeText(description || "");
-
-    //안전하게 프롬프트 준비 (요약 포함)
     const { finalPrompt, summary } = await safePreparePrompt(cleanDescription);
 
-    // 로그: 실제 전송되는 프롬프트 길이 확인용
     console.log("Prepared prompt length:", finalPrompt.length);
 
-    // 이미지 생성 요청 (프롬프트는 짧게 잘라서 보냄)
-    const imageRes = await fetch("https://api.openai.com/v1/images/generations", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        prompt: `Create a cute, child-friendly illustration based on this story: "${finalPrompt}"`,
-        size: "256x256",
-      }),
-    });
+    // 이미지 생성 시도
+    let imageUrl: string | null = null;
+    let warning: string | undefined = undefined;
 
-    if (!imageRes.ok) {
-      const err = await imageRes.text();
-      console.error("OpenAI Image Error:", imageRes.status, err);
-      return { statusCode: 500, body: JSON.stringify({ error: `OpenAI Image Error: ${err}` }) };
+    try {
+      const imageRes = await fetch("https://api.openai.com/v1/images/generations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          prompt: `Create a cute, child-friendly illustration based on this story: "${finalPrompt}"`,
+          size: "256x256",
+        }),
+      });
+
+      const imageDataRawUnknown: unknown = await imageRes.json();
+
+      if (!imageRes.ok) {
+        console.error(
+          "OpenAI Image Error:",
+          imageRes.status,
+          typeof imageDataRawUnknown === "object" ? JSON.stringify(imageDataRawUnknown) : imageDataRawUnknown
+        );
+        warning = "The image could not be generated due to content policy restrictions.";
+      } else {
+        // 안전하게 타입 체크
+        if (
+          typeof imageDataRawUnknown === "object" &&
+          imageDataRawUnknown !== null &&
+          "data" in imageDataRawUnknown &&
+          Array.isArray((imageDataRawUnknown as any).data)
+        ) {
+          const imageDataRaw = imageDataRawUnknown as OpenAIImageResponse;
+          imageUrl = imageDataRaw?.data?.[0]?.url || null;
+          if (!imageUrl) {
+            warning = "The image could not be generated, but the summary is available.";
+          }
+        } else {
+          warning = "The image could not be generated due to unexpected response structure.";
+        }
+      }
+    } catch (imgErr: unknown) {
+      console.error("Image generation exception:", imgErr);
+      warning = "The image could not be generated due to an unexpected error.";
     }
 
-    const imageDataRaw: any = await imageRes.json();
-    const imageUrl = imageDataRaw?.data?.[0]?.url;
-
-    if (!imageUrl) {
-      console.error("No image URL in response:", imageDataRaw);
-      return { statusCode: 500, body: JSON.stringify({ error: "No image URL returned from OpenAI" }) };
-    }
-
-    // 반환
     const responseBody: ImageResponse = {
       imageUrl,
-      summary: summary, // summary가 undefined일 수도 있음
+      summary,
+      warning,
     };
 
     return { statusCode: 200, body: JSON.stringify(responseBody) };
-
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Server Error:", error);
-    return { statusCode: 500, body: JSON.stringify({ error: `Server Error: ${error.message || error}` }) };
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        error: `Server Error: ${error instanceof Error ? error.message : String(error)}`,
+      }),
+    };
   }
 };
 

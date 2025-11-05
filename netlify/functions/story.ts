@@ -44,7 +44,7 @@ export const handler: Handler = async (event) => {
         messages: [
           {
             role: "user",
-            content: `Create a short children's story based on this text: "${text}" and translate it into ${language}.`,
+            content: `Create a short children's story based on this text: "${text}". The story must be fully in ${language}.`,
           },
         ],
       }),
